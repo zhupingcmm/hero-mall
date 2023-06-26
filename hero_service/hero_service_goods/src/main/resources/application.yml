@@ -1,0 +1,28 @@
+server:
+  port: 9011
+spring:
+  application:
+    name: goods
+  datasource:
+    dynamic:
+      primary: master
+      druid:
+        initial-size: 3
+        min-idle: 3
+        max-active: 40
+        max-wait: 6000
+      datasource:
+        master:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/hero_goods?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+          username: root
+          password: 1234
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+workerId: 0
+datacenterId: 0
+mybatis:
+  type-aliases-package: com.hero.goods.pojo
+  mapper-locations: classpath:mapping/*Mapper.xml
