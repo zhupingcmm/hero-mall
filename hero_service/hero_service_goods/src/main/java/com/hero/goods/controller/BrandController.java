@@ -3,7 +3,6 @@ package com.hero.goods.controller;
 import com.github.pagehelper.Page;
 import com.hero.entity.PageResult;
 import com.hero.entity.Result;
-import com.hero.entity.StatusCode;
 import com.hero.goods.pojo.Brand;
 import com.hero.goods.service.BrandService;
 import io.swagger.annotations.Api;
@@ -36,7 +35,7 @@ public class BrandController {
     }
 
     @ApiOperation(value = "获取指定ID的品牌信息")
-    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "品牌ID")})
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "品牌ID", defaultValue = "1")})
     @GetMapping("/{id}")
     public Result<Brand> findById(@PathVariable Integer id) {
         return Result.success(brandService.findById(id));
@@ -64,7 +63,7 @@ public class BrandController {
      * @return
      */
     @ApiOperation(value = "删除指定ID的品牌信息")
-    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "品牌ID")})
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "品牌ID", defaultValue = "1")})
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         brandService.delete(id);
@@ -77,7 +76,7 @@ public class BrandController {
      * @param searchMap
      * @return
      */
-    @ApiOperation(value = "查询品牌信息")
+    @ApiOperation(value = "根据条件，查询品牌信息")
     @ApiImplicitParams({@ApiImplicitParam(name = "searchMap", value = "品牌信息")})
     @GetMapping(value = "/search" )
     public Result<List<Brand>> findList(@RequestParam Map<String, Object> searchMap){
@@ -86,20 +85,36 @@ public class BrandController {
     }
 
 
+//    /***
+//     * 分页搜索实现
+//     * @param searchMap
+//     * @param page
+//     * @param size
+//     * @return
+//     */
+//    @ApiOperation(value = "查询品牌信息")
+//    @ApiImplicitParams({@ApiImplicitParam(name = "searchMap", value = "品牌信息"), @ApiImplicitParam(name = "page", value = "起始页"), @ApiImplicitParam(name = "size", value = "每页数据量")})
+//    @GetMapping(value = "/search/{page}/{size}" )
+//    public Result<PageResult<Brand>> findPage(@RequestParam Map<String, Object> searchMap, @PathVariable  int page, @PathVariable  int size){
+//        Page<Brand> pageList = brandService.findPage(searchMap, page, size);
+//        PageResult<Brand> pageResult=new PageResult<Brand>(pageList.getTotal(),pageList.getResult());
+//        return Result.success(pageResult);
+//    }
+
     /***
      * 分页搜索实现
-     * @param searchMap
+     *
      * @param page
      * @param size
      * @return
      */
-    @ApiOperation(value = "查询品牌信息")
-    @ApiImplicitParams({@ApiImplicitParam(name = "searchMap", value = "品牌信息"), @ApiImplicitParam(name = "page", value = "起始页"), @ApiImplicitParam(name = "size", value = "每页数据量")})
+    @ApiOperation(value = "查询品牌信息， 分页查询")
+    @ApiImplicitParams({@ApiImplicitParam(name = "page", value = "起始页", defaultValue = "1"), @ApiImplicitParam(name = "size", value = "每页数据量", defaultValue = "20")})
     @GetMapping(value = "/search/{page}/{size}" )
-    public Result findPage(@RequestParam Map<String, Object> searchMap, @PathVariable  int page, @PathVariable  int size){
-        Page<Brand> pageList = brandService.findPage(searchMap, page, size);
-        PageResult pageResult=new PageResult(pageList.getTotal(),pageList.getResult());
-        return new Result(true,StatusCode.OK,"查询成功",pageResult);
+    public Result<PageResult<Brand>> findPage(@PathVariable int page, @PathVariable int size){
+        Page<Brand> pageList = brandService.findPage(page, size);
+        PageResult<Brand> pageResult=new PageResult<>(pageList.getTotal(),pageList.getResult());
+        return Result.success(pageResult);
     }
 
 

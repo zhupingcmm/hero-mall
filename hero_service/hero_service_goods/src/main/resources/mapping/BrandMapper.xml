@@ -19,7 +19,7 @@
 
 
     <select id="findAll" resultMap="BrandMap">
-        select * from tb_brand;
+        select id, name, image, letter, seq from tb_brand
     </select>
 
     <select id="findById" resultMap="BrandMap" parameterType="integer">
