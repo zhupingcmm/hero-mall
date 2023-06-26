@@ -9,6 +9,14 @@
         <result property="seq" column="seq"/>
     </resultMap>
 
+    <parameterMap  id="BrandParameterMap" type="com.hero.goods.pojo.Brand">
+        <parameter  property="id" resultMap="BrandMap"/>
+        <parameter  property="name" resultMap="BrandMap"/>
+        <parameter  property="image" resultMap="BrandMap"/>
+        <parameter  property="letter" resultMap="BrandMap"/>
+        <parameter  property="seq" resultMap="BrandMap"/>
+    </parameterMap>
+
 
     <select id="findAll" resultMap="BrandMap">
         select * from tb_brand;
@@ -21,5 +29,51 @@
             id = #{id}
         </where>
     </select>
+
+    <select id="findList" resultMap="BrandMap" parameterType="com.hero.goods.pojo.Brand">
+        select id, name, image, letter, seq
+        from tb_brand
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%', #{name}, '%')
+            </if>
+            <if test="letter != null and letter != ''">
+                and letter=#{letter}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addBrand" parameterType="com.hero.goods.pojo.Brand">
+        INSERT INTO tb_brand (id, name, image, letter, seq)
+        VALUES ( #{id},
+                #{name},
+                #{image},
+                #{letter},
+                #{seq})
+    </insert>
+
+    <update id="update" parameterType="com.hero.goods.pojo.Brand">
+        UPDATE tb_brand
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="letter != null">
+                letter = #{letter},
+            </if>
+            <if test="letter != null">
+                seq = #{seq}
+            </if>
+        </set>
+        <where>
+            id = #{id};
+        </where>
+    </update>
+    <delete id="delete" parameterType="integer">
+        delete from tb_brand where id = #{id}
+    </delete>
 
 </mapper>

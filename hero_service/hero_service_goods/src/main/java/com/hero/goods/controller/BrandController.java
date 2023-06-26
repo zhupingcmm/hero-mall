@@ -1,17 +1,20 @@
 package com.hero.goods.controller;
 
+import com.github.pagehelper.Page;
+import com.hero.entity.PageResult;
 import com.hero.entity.Result;
+import com.hero.entity.StatusCode;
 import com.hero.goods.pojo.Brand;
 import com.hero.goods.service.BrandService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: pzhu
@@ -33,8 +36,72 @@ public class BrandController {
     }
 
     @ApiOperation(value = "获取指定ID的品牌信息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "品牌ID")})
     @GetMapping("/{id}")
     public Result<Brand> findById(@PathVariable Integer id) {
         return Result.success(brandService.findById(id));
     }
+
+    @ApiOperation(value = "添加品牌")
+    @ApiImplicitParams({@ApiImplicitParam(name = "brand", value = "品牌信息")})
+    @PostMapping
+    public Result<?> add(@RequestBody Brand brand) {
+        brandService.add(brand);
+        return Result.success("添加成功");
+    }
+
+    @ApiOperation(value = "更新品牌信息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "brand", value = "品牌信息")})
+    @PutMapping
+    public Result<?> update(@RequestBody Brand brand) {
+        brandService.update(brand);
+        return Result.success("更新成功");
+    }
+
+    /***
+     * 根据ID删除品牌数据
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "删除指定ID的品牌信息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "品牌ID")})
+    @DeleteMapping(value = "/{id}" )
+    public Result delete(@PathVariable Integer id){
+        brandService.delete(id);
+        return Result.success("删除成功");
+    }
+
+
+    /***
+     * 多条件搜索品牌数据
+     * @param searchMap
+     * @return
+     */
+    @ApiOperation(value = "查询品牌信息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "searchMap", value = "品牌信息")})
+    @GetMapping(value = "/search" )
+    public Result<List<Brand>> findList(@RequestParam Map<String, Object> searchMap){
+        List<Brand> list = brandService.findList(searchMap);
+        return Result.success(list);
+    }
+
+
+    /***
+     * 分页搜索实现
+     * @param searchMap
+     * @param page
+     * @param size
+     * @return
+     */
+    @ApiOperation(value = "查询品牌信息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "searchMap", value = "品牌信息"), @ApiImplicitParam(name = "page", value = "起始页"), @ApiImplicitParam(name = "size", value = "每页数据量")})
+    @GetMapping(value = "/search/{page}/{size}" )
+    public Result findPage(@RequestParam Map<String, Object> searchMap, @PathVariable  int page, @PathVariable  int size){
+        Page<Brand> pageList = brandService.findPage(searchMap, page, size);
+        PageResult pageResult=new PageResult(pageList.getTotal(),pageList.getResult());
+        return new Result(true,StatusCode.OK,"查询成功",pageResult);
+    }
+
+
+
 }

@@ -26,3 +26,7 @@ datacenterId: 0
 mybatis:
   type-aliases-package: com.hero.goods.pojo
   mapper-locations: classpath:mapping/*Mapper.xml
+# application.yml
+pagehelper:
+  helper-dialect: mysql
+  params: count=countSql

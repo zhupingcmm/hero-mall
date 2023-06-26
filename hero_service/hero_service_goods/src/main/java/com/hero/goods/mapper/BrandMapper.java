@@ -1,6 +1,7 @@
 package com.hero.goods.mapper;
 
 import com.hero.goods.pojo.Brand;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,5 +17,16 @@ public interface BrandMapper {
     List<Brand> findAll();
 
     Brand findById(@Param(value = "id") Integer id);
+
+    void addBrand(Brand brand);
+
+    void update(Brand brand);
+
+    void delete(@Param(value = "id") Integer id);
+
+    List<Brand> findList(Brand brand);
+
+
+
 
 }
