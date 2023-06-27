@@ -24,6 +24,11 @@ public class BrandServiceImpl implements BrandService {
     private BrandMapper brandMapper;
 
     @Override
+    public List<Brand> findListByCategoryName(String category) {
+        return brandMapper.findListByCategoryName(category);
+    }
+
+    @Override
     public List<Brand> findAll() {
         return brandMapper.findAll();
     }

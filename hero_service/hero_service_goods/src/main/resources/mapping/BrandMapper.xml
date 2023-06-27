@@ -43,6 +43,24 @@
         </where>
     </select>
 
+    <select id="findListByCategoryName" parameterType="string" resultMap="BrandMap">
+        select id, name, image, letter, seq
+        from tb_brand
+        <where>
+            id in
+            (
+                select brand_id from tb_category_brand
+                <where>
+                    category_id IN
+                    (
+                        SELECT id FROM tb_category WHERE name=#{category}
+                    )
+                </where>
+            )
+        </where>
+        order by seq
+    </select>
+
     <insert id="addBrand" parameterType="com.hero.goods.pojo.Brand">
         INSERT INTO tb_brand (id, name, image, letter, seq)
         VALUES ( #{id},

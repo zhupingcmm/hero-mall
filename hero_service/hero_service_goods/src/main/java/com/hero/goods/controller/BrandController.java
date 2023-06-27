@@ -117,6 +117,18 @@ public class BrandController {
         return Result.success(pageResult);
     }
 
+    /**
+     * 根据分类名称查询品牌列表
+     * @param category
+     * @return
+     */
+    @ApiOperation(value = "根据品牌种类,查询品牌信息")
+    @ApiImplicitParams({@ApiImplicitParam(name = "category", value = "种类")})
+    @GetMapping("/category/{category}")
+    public Result<List<Brand>> findListByCategoryName(@PathVariable String category) {
+        return Result.success(brandService.findListByCategoryName(category));
+    }
+
 
 
 }

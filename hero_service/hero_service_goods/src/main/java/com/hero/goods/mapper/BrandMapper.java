@@ -14,6 +14,8 @@ import java.util.List;
 @Mapper
 public interface BrandMapper {
 
+    List<Brand> findListByCategoryName(@Param(value = "category") String category);
+
     List<Brand> findAll();
 
     Brand findById(@Param(value = "id") Integer id);
