@@ -35,9 +35,13 @@ public class Result<T> {
         return new Result<>(true, StatusCode.OK, "操作成功",data);
     }
 
-    public static Result<?> success(String message){
-        return new Result<>(true, StatusCode.OK, message, null);
-    }
+//    public static <T> Result<T> success(String message, T data){
+//        return new Result<T>(true, StatusCode.OK, message, null);
+//    }
+
+//    public static Result<String> success(String data){
+//        return new Result<>(true, StatusCode.OK, "", data);
+//    }
 
 
     public static <T> Result<T> error(Integer code, T data){
